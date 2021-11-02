@@ -36,21 +36,6 @@ decode_data:
 		
 		mov [ebp-12], edx;										; push current
 		
-		shr edx, 4												;edx <- edx >> 4, edx <- data
-
-		mov ebx, edi											; ebx <- edi
-		shr ebx, 1												; ebx <- ebx >> 1 (ebx divided by 2) 
-		; 0th byte goes to 0 byte
-		; 1th byte goes to 0 byte
-		; 2th byte goes to 1 byte 
-		; 3th byte goes to 1 byte soo i >> 1
-
-		mov eax, [ebp + 16 + 4 + 4 + 4]							; eax <- decodedBytes
-		xor ecx, ecx											; clear ecx
-		mov cl, byte[eax + ebx]									; cl <-  decodedBytes[ebx]
-		shl ecx, 4												; ecx<- ecx << 4 make room for new decodedData
-		or ecx, edx												; ecx <- ecx | edx (make together data0 |data1)
-		mov byte[eax + ebx], cl									; write to decodedBytes 
 
 		
 
@@ -121,6 +106,7 @@ decode_data:
 		
 		
 		no_error: mov ebx, 0			; ebx<-0 if no error write 0 to error status
+		mov edx, [ebp -12]				;edx <- value
 		jmp cont_data_loop				; cont to data loop
 		
 		;if there is error, error status = 10000000 >> found_row_number
@@ -130,19 +116,41 @@ decode_data:
 		mov eax, [ebp -16]				; eax <- error_count		
 		add eax,1						; eax <- eax + 1 (error_count ++)	
 		mov [ebp -16],eax				; error_count <- eax
-		
+		mov edx, [ebp -12]				;edx <- value
+		xor edx, ebx											;error xor data
+
+
 		cont_data_loop: 				;write the found error and go back to begining of the loop			
 
 		mov eax, [ebp + 32 + 12]		;eax <- errorStatus
 		mov byte[eax + edi], bl			;write error status to errorStatus[i]
 
 		
+		
+		shr edx, 4												;edx <- edx >> 4, edx <- data
+
+		mov ebx, edi											; ebx <- edi
+		shr ebx, 1												; ebx <- ebx >> 1 (ebx divided by 2) 
+		; 0th byte goes to 0 byte
+		; 1th byte goes to 0 byte
+		; 2th byte goes to 1 byte 
+		; 3th byte goes to 1 byte soo i >> 1
+
+		mov eax, [ebp + 16 + 4 + 4 + 4]							; eax <- decodedBytes
+		xor ecx, ecx											; clear ecx
+		mov cl, byte[eax + ebx]									; cl <-  decodedBytes[ebx]
+		shl ecx, 4												; ecx<- ecx << 4 make room for new decodedData
+		or ecx, edx												; ecx <- ecx | edx (make together data0 |data1)
+		mov byte[eax + ebx], cl									; write to decodedBytes 
+
+
 		add edi, 1						;increment edi (i++)
 		
 		jmp data_loop					; go next encodedData value
 
     end_data_loop:
 		pop eax							;return value
+		
 		pop edx							; clear pushed values by popping
 		pop edx							; clear pushed values by popping			
 		pop edx							; clear pushed values by popping
