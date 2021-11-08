@@ -24,7 +24,7 @@ encode_data:
     mov edi, 0;
         
 
-    big_loop: cmp edi,  [ebp + 12 + 4 + 4 + 4]               ; loop goes on edi-0
+    big_loop: cmp edi,  [ebp + 12 + 4 + 4 + 4]               ; loop goes on edi-0 nInoutBytes
         je end_loop_big                                      ; if edi = -4 end the loop
         mov esi,1                                            ; esi <- 1 (counter for datas in byte first and second)
         byte_tara: cmp esi, -1                               ; compare esi with 1

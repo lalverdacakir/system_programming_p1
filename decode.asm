@@ -24,7 +24,7 @@ decode_data:
     mov edi, 0;
         push dword 0; syndrome
 		push dword 0; temp syndrome
-		push dword 0;
+		push dword 0; data
 		push dword 0; return value
     data_loop: cmp edi,  [ebp + 12 + 4 + 4 + 4]               ; edi <- nEncodedBytes
         je end_data_loop                                      ; if edi = -4 end the loop
