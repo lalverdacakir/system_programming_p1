@@ -26,6 +26,24 @@ decode_data:
 		push dword 0; temp syndrome
 		push dword 0; data
 		push dword 0; return value
+
+	;stack
+	;	ret value <- ebp -16
+	;	data <- ebp-12
+	;	temp sydrome <- ebp -8
+	;	sydrome <- ebp -4
+    ;   ebp <- ebp + 0
+    ;   esi <- ebp + 4
+    ;   edi <- ebp + 4 + 4
+    ;   ebx <- ebp + 4 + 4 + 4
+    ;   ret address <- ebp + 4 + 4 + 4 + 4
+    ;   inputBytes pointer <- ebp + 8 + 4 + 4 + 4
+    ;   nInputBytes <- ebp + 12 + 4 + 4 + 4
+    ;   encodedBytes pointer <- ebp + 16 + 4 + 4 + 4
+    ;   nEncodedBytes <- ebp + 20 + 4 + 4 + 4
+    ;   H pointer <- ebp + 24 + 4 + 4 + 4
+    ;   Hmr pointer <- ebp + 28 + 4 + 4 + 4
+
     data_loop: cmp edi,  [ebp + 12 + 4 + 4 + 4]               ; edi <- nEncodedBytes
         je end_data_loop                                      ; if edi = -4 end the loop
         

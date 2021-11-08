@@ -22,7 +22,19 @@ encode_data:
     
    
     mov edi, 0;
-        
+    ;stack
+    ;   ebp <- ebp + 0
+    ;   esi <- ebp + 4
+    ;   edi <- ebp + 4 + 4
+    ;   ebx <- ebp + 4 + 4 + 4
+    ;   ret address <- ebp + 4 + 4 + 4 + 4
+    ;   inputBytes pointer <- ebp + 8 + 4 + 4 + 4
+    ;   nInputBytes <- ebp + 12 + 4 + 4 + 4
+    ;   encodedBytes pointer <- ebp + 16 + 4 + 4 + 4
+    ;   nEncodedBytes <- ebp + 20 + 4 + 4 + 4
+    ;   H pointer <- ebp + 24 + 4 + 4 + 4
+    ;   Hmr pointer <- ebp + 28 + 4 + 4 + 4
+
 
     big_loop: cmp edi,  [ebp + 12 + 4 + 4 + 4]               ; loop goes on edi-0 nInoutBytes
         je end_loop_big                                      ; if edi = -4 end the loop
